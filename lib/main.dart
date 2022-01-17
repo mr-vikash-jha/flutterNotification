@@ -177,6 +177,26 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  Future getUserData() async {
+    var response =
+    await http.get(Uri.http('jsonplaceholder.typicode.com', 'users'));
+    print(response.body);
+    var jsonData = jsonDecode(response.body);
+    List<User> users = [];
+
+    for (var u in jsonData) {
+      User user = User(
+        u["name"],
+        u["email"],
+        u["userName"],
+      );
+      users.add(user);
+    }
+
+    print(users.length);
+    return users;
+  }
+
   @override
   void initState() {
     super.initState();
@@ -281,6 +301,7 @@ class _HomePageState extends State<HomePage> {
                       buttonText: 'Show plain notification with payload',
                       onPressed: () async {
                         await _showNotification();
+                        await getUserData();
                       },
                     ),
                     PaddedElevatedButton(
@@ -2078,6 +2099,10 @@ class _HomePageState extends State<HomePage> {
   }
 }
 
+class User {
+  User(u, u2, u3);
+}
+
 Future<void> _showLinuxNotificationWithBodyMarkup() async {
   await flutterLocalNotificationsPlugin.show(
     0,
@@ -2340,4 +2365,10 @@ class _InfoValueString extends StatelessWidget {
           ),
         ),
       );
+}
+
+class user {
+  final String name, email, userName;
+
+  user(this.name, this.email, this.userName);
 }
